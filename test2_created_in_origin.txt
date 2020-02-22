@@ -1,7 +1,0 @@
-hello abhishek here
-<<<<<<< HEAD
-
-master..hello tera
-=======
-app..lello tera
->>>>>>> fa39faaac1878cc85b1eb8f01645d57d8593d92d
