@@ -1,0 +1,48 @@
+{
+  "name": "developesfb",
+  "version": "1.0.0",
+  "description": "social network for developers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "transpile": "babel server.js --out-file dist-server.js",
+    "nodemon_server": "nodemon dist-server",
+    "clean": "rimraf dist-server.js",
+    "server": "nodemon server"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhisheksingh75/DevelopersFaceBook.git"
+  },
+  "author": "\"Abhishek Singh\"",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abhisheksingh75/DevelopersFaceBook/issues"
+  },
+  "homepage": "https://github.com/abhisheksingh75/DevelopersFaceBook#readme",
+  "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "bcryptjs": "^2.4.3",
+    "config": "^3.2.6",
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "gravatar": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.2",
+    "npm-run-all": "^4.1.5",
+    "request": "^2.88.2",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1"
+  }
+}
