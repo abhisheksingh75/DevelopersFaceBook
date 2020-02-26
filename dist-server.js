@@ -7,8 +7,6 @@ function _interopRequireDefault(obj) {
 }
 
 var app = (0, _express["default"])()
-var PORT = process.env.PORT || 5000
-console.log("Asdas")
 app.get("/", function(req, res) {
   res.send("API Running")
 })

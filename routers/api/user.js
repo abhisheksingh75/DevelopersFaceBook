@@ -4,6 +4,8 @@ const { check, validationResult } = require("express-validator")
 const User = require("../../models/users")
 const gravatar = require("gravatar")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const config = require("config")
 
 const router = express.Router()
 //@POST API
@@ -55,11 +57,29 @@ router.post(
         password: password,
         avatar: avatar
       })
+      //encryt the password
       const salt = await bcrypt.genSalt(10)
       user.password = await bcrypt.hash(password, salt)
       await user.save()
-      //encryt the password
-      res.send("user saved")
+
+      const payload = {
+        users: {
+          id: user._id
+        }
+      }
+
+      jwt.sign(
+        payload,
+        config.get("jwtToken"),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) {
+            throw err
+          } else {
+            res.json({ token })
+          }
+        }
+      )
     } catch (err) {
       console.log("server errror " + err.message)
       res.status(500).send("server error")
