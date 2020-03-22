@@ -8,7 +8,9 @@
     "transpile": "babel server.js --out-file dist-server.js",
     "nodemon_server": "nodemon dist-server",
     "clean": "rimraf dist-server.js",
-    "server": "nodemon server"
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "babel": {
     "presets": [
@@ -31,6 +33,7 @@
     "@babel/preset-env": "^7.8.4",
     "bcryptjs": "^2.4.3",
     "config": "^3.2.6",
+    "create-react-app": "^3.4.0",
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
     "gravatar": "^1.8.0",
