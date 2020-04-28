@@ -1,0 +1,6 @@
+{
+  "MongoURL": "mongodb+srv://Abhisheksingh75:Abhisheksingh75@developersfb-tjcvi.mongodb.net/test2?retryWrites=true&w=majority",
+  "jwtToken": "mySecretToken",
+  "githubClientId": "405cb81647346dabea54",
+  "githubSecret": "baee5082df5733b42621616dcd68a85573ad39d5"
+}
