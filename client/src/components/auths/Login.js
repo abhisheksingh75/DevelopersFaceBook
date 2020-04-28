@@ -1,23 +1,29 @@
 import React, { useState } from "react"
-import axios from "axios"
-import { Link } from "react-router-dom"
+// import axios from "axios"
+import PropTypes from "prop-types"
+import { Link, Redirect } from "react-router-dom"
+import { connect } from "react-redux"
+import { login } from "../../action/auth"
 
-const Login = () => {
+const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   })
 
   const { email, password } = formData
 
-  const OnChange = e =>
+  const OnChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value })
 
-  const OnSubmit = async e => {
+  const OnSubmit = async (e) => {
     e.preventDefault()
-    console.log("SUCCESS")
+    login({ email, password })
   }
 
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />
+  }
   return (
     <>
       {/*Alert*/}
@@ -26,14 +32,15 @@ const Login = () => {
         <i className="fas fa-user-circle"></i> Sign in your Account
       </p>
 
-      <form onSubmit={e => OnSubmit(e)} className="form">
+      <form onSubmit={(e) => OnSubmit(e)} className="form">
         <div className="form-group">
           <input
             type="email"
             placeholder="Email"
             name="email"
             value={email}
-            onChange={e => OnChange(e)}
+            onChange={(e) => OnChange(e)}
+            autoComplete="true"
           />
         </div>
 
@@ -44,11 +51,13 @@ const Login = () => {
             name="password"
             minLength="6"
             value={password}
-            onChange={e => OnChange(e)}
-            autoComplete
+            onChange={(e) => OnChange(e)}
+            autoComplete="true"
           />
         </div>
-        <input type="submit" text="login" className="btn btn-primary" />
+        <button text="login" className="btn btn-primary">
+          submit
+        </button>
       </form>
       <p className="my-1">
         Don't have an account?
@@ -57,4 +66,13 @@ const Login = () => {
     </>
   )
 }
-export default Login
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+}
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+})
+
+export default connect(mapStateToProps, { login })(Login)

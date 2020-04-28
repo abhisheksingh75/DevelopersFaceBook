@@ -16,8 +16,8 @@ router.post(
     [
       check("text")
         .notEmpty()
-        .withMessage("Text is required")
-    ]
+        .withMessage("Text is required"),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req)
@@ -30,7 +30,7 @@ router.post(
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id
+        user: req.user.id,
       }
 
       const post = new Post(newPost)
@@ -43,14 +43,27 @@ router.post(
   }
 )
 
+//@Get /api/post/
+//@DESC get all posts
+//@ACCESS Private
+router.get("/", auth, async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ date: -1 })
+    res.json(posts)
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send("Server Error")
+  }
+})
+
 //@Get /api/post/:id
-//@DESC get all post
+//@DESC get post by id
 //@ACCESS Private
 
 router.get("/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById({ _id: req.params.id }).sort({
-      date: "desc"
+      date: "desc",
     })
     if (!post) {
       res.status(400).send({ msg: "post not found" })
@@ -69,7 +82,7 @@ router.get("/:id", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById({ _id: req.params.id }).sort({
-      date: "desc"
+      date: "desc",
     })
 
     //check if post exists
@@ -105,8 +118,9 @@ router.put("/like/:id", auth, async (req, res) => {
     }
 
     if (
-      post.likes.filter(like => like.user.toString() === req.user.id.toString())
-        .length > 0
+      post.likes.filter(
+        (like) => like.user.toString() === req.user.id.toString()
+      ).length > 0
     ) {
       return res.status(400).json({ msg: "Post already liked by You" })
     }
@@ -134,15 +148,16 @@ router.put("/unlike/:id", auth, async (req, res) => {
 
     //check if the post is been liked or not
     if (
-      post.likes.filter(like => like.user.toString() === req.user.id.toString())
-        .length === 0
+      post.likes.filter(
+        (like) => like.user.toString() === req.user.id.toString()
+      ).length === 0
     ) {
       return res.status(400).json({ msg: "Post has not yet been liked" })
     }
 
     //Get Index removed
     const removeIndex = post.likes
-      .map(like => like.user.toString())
+      .map((like) => like.user.toString())
       .indexOf(req.user.id.toString())
 
     post.likes.splice(removeIndex, 1)
@@ -164,8 +179,8 @@ router.post(
     [
       check("text")
         .notEmpty()
-        .withMessage("Text is required")
-    ]
+        .withMessage("Text is required"),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req)
@@ -193,7 +208,7 @@ router.post(
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id
+        user: req.user.id,
       }
 
       post.comments.unshift(newComment)
@@ -223,7 +238,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
 
     //check if comment exists
     const removeIdx = post.comments
-      .map(comment => comment._id.toString())
+      .map((comment) => comment._id.toString())
       .indexOf(req.params.comment_id.toString())
 
     if (removeIdx < 0) {

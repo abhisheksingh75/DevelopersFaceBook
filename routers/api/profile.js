@@ -14,18 +14,17 @@ const router = express.Router()
 router.get("/me", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.user.id
+      user: req.user.id,
     }).populate("user", ["name", "avatar"])
 
     if (!profile) {
-      res.status(400).json({ msg: "There is no profile for the user" })
+      return res.status(400).json({ msg: "There is no profile for the user" })
     }
     res.json(profile)
   } catch (err) {
     console.log(err.message)
     res.status(500).send("Server Error")
   }
-  res.send("Profile API")
 })
 
 //@GET API/profile
@@ -41,8 +40,8 @@ router.post(
         .withMessage("Status is required"),
       check("skills")
         .notEmpty()
-        .withMessage("skills is requried")
-    ]
+        .withMessage("skills is requried"),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req)
@@ -61,7 +60,7 @@ router.post(
       twitter,
       facebook,
       linkedin,
-      instagram
+      instagram,
     } = req.body
 
     //build profile objects
@@ -73,7 +72,7 @@ router.post(
     if (status) profileFields.status = status
     if (bio) profileFields.bio = bio
     if (githubusername) profileFields.githubusername = githubusername
-    profileFields.skills = skills.split(",").map(skill => {
+    profileFields.skills = skills.split(",").map((skill) => {
       return skill.trim()
     })
     //Build social object
@@ -110,14 +109,14 @@ router.post(
   }
 )
 
-//@GET API/profile
+//@GET api/profile
 //@DESC Get all profile
 //@ACCESS Public
 router.get("/", async (req, res) => {
   try {
     const profile = await Profile.find()
       .populate("user", ["name", "avatar"])
-      .catch(error => console.log(error.message))
+      .catch((error) => console.log(error.message))
     res.send(profile)
   } catch (error) {
     console.log(error.message)
@@ -132,7 +131,7 @@ router.get("/user/:user_id", async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.params.user_id })
       .populate("user", ["name", "avatar"])
-      .catch(error => console.log(error.message))
+      .catch((error) => console.log(error.message))
 
     if (!profile) return res.status(400).send({ msg: "Profile not Found" })
     res.send(profile)
@@ -176,8 +175,8 @@ router.put(
         .withMessage("Company is requried"),
       check("from")
         .notEmpty()
-        .withMessage("from is requried")
-    ]
+        .withMessage("from is requried"),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req)
@@ -191,7 +190,7 @@ router.put(
       from,
       to,
       current,
-      description
+      description,
     } = req.body
 
     const newExp = {
@@ -201,7 +200,7 @@ router.put(
       from,
       to,
       current,
-      description
+      description,
     }
 
     try {
@@ -229,7 +228,7 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
     //find profile
     const profile = await Profile.findOne({ user: req.user.id })
     const exp_idx = profile.experience
-      .map(item => item._id)
+      .map((item) => item._id)
       .indexOf(req.params.exp_id)
 
     if (exp_idx < 0) {
@@ -263,8 +262,8 @@ router.put(
         .withMessage("fieldofstudy is requried"),
       check("from")
         .notEmpty()
-        .withMessage("from is requried")
-    ]
+        .withMessage("from is requried"),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req)
@@ -278,7 +277,7 @@ router.put(
       from,
       to,
       current,
-      description
+      description,
     } = req.body
 
     const newEdu = {
@@ -288,7 +287,7 @@ router.put(
       from,
       to,
       current,
-      description
+      description,
     }
 
     try {
@@ -316,7 +315,7 @@ router.delete("/education/:edu_id", auth, async (req, res) => {
     //find profile
     const profile = await Profile.findOne({ user: req.user.id })
     const edu_idx = profile.education
-      .map(item => item._id)
+      .map((item) => item._id)
       .indexOf(req.params.edu_id)
     if (edu_idx < 0) {
       return res.status(400).send("education not found")
@@ -338,8 +337,8 @@ router.get("/github/:username", (req, res) => {
     const options = {
       uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`,
       method: "GET",
-      headers: { "user-agent": "node.js" }
-    } 
+      headers: { "user-agent": "node.js" },
+    }
     request(options, (error, response, body) => {
       if (error) console.log(error.message)
 

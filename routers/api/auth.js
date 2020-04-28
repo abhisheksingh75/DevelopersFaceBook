@@ -15,8 +15,8 @@ router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById({ _id: req.user.id })
       .select("-password")
-      .catch(err => console.log("caught it"))
-    res.json(user)
+      .catch((err) => console.log("caught it"))
+    return res.json(user)
   } catch (err) {
     console.log(err.message)
     res.status(500).send("server Error")
@@ -34,7 +34,7 @@ router.post(
       .withMessage("Enter valid email address"),
     check("password")
       .isLength({ min: 6 })
-      .withMessage("Enter password of atlease 6 characters")
+      .withMessage("Enter password of atlease 6 characters"),
   ],
 
   async (req, res) => {
@@ -52,9 +52,9 @@ router.post(
         return res.status(400).json({
           errors: [
             {
-              msg: "Invalid user"
-            }
-          ]
+              msg: "Invalid user",
+            },
+          ],
         })
       }
       //check the password
@@ -63,16 +63,16 @@ router.post(
         return res.status(400).json({
           errors: [
             {
-              msg: "Invalid Credentials"
-            }
-          ]
+              msg: "Invalid Credentials",
+            },
+          ],
         })
       }
 
       const payload = {
         users: {
-          id: user._id
-        }
+          id: user._id,
+        },
       }
 
       jwt.sign(
